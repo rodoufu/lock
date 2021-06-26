@@ -1,0 +1,47 @@
+syntax = "proto3";
+
+package message;
+
+message Message {
+	bytes payload = 1;
+	bytes digest = 2;
+	bytes signature = 3;
+	bytes public_key = 4;
+}
+
+message AddReplicaRequest {
+	bytes public_key = 1;
+}
+
+message Replica {
+	bytes public_key = 1;
+	int32 replica_index = 2;
+}
+
+message IsPrimary {
+	bytes server_public_key = 1;
+	int32 replica_index = 2;
+	repeated Replica replicas = 3;
+}
+
+message IsNotPrimary {
+}
+
+message AddReplicaResponse {
+	oneof response {
+		IsPrimary is_primary = 1;
+		IsNotPrimary is_not_primary = 2;
+	}
+}
+
+message UpdateReplicasRequest {
+	Replica replica = 1;
+}
+
+message UpdateReplicasResponse {
+}
+
+service NodeService {
+	rpc AddReplica (AddReplicaRequest) returns (AddReplicaResponse);
+	rpc UpdateReplicas (stream UpdateReplicasRequest) returns (UpdateReplicasResponse);
+}
