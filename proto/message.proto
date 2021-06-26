@@ -41,7 +41,20 @@ message UpdateReplicasRequest {
 message UpdateReplicasResponse {
 }
 
+message SendMessageRequest {
+	oneof request {
+		Message msg = 1;
+	}
+}
+
+message SendMessageResponse {
+	oneof response {
+		Message msg = 1;
+	}
+}
+
 service NodeService {
 	rpc AddReplica (AddReplicaRequest) returns (AddReplicaResponse);
 	rpc UpdateReplicas (stream UpdateReplicasRequest) returns (UpdateReplicasResponse);
+	rpc SendMessage(SendMessageRequest) returns (SendMessageResponse);
 }
